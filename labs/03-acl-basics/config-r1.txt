@@ -1,0 +1,12 @@
+# R1 — ACL Config Placeholder
+# Replace with actual output after lab is built.
+
+hostname R1
+!
+ip access-list extended BLOCK_HTTP
+ deny   tcp 192.168.10.0 0.0.0.255 host 10.0.0.5 eq 80
+ permit ip any any
+!
+interface GigabitEthernet0/1
+ ip access-group BLOCK_HTTP in
+!

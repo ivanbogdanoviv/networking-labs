@@ -1,0 +1,38 @@
+# Packet Tracer
+*.pkt
+*.pkz
+
+# GNS3
+*.gns3
+*.gns3project
+GNS3/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment / secrets
+.env
+*.env
+secrets.yaml
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

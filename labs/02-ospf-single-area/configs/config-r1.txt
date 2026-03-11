@@ -1,0 +1,12 @@
+# R1 — Running Config Placeholder
+# Replace with actual output after lab is built.
+
+hostname R1
+!
+interface GigabitEthernet0/0
+ ip address 10.0.12.1 255.255.255.0
+ no shutdown
+!
+router ospf 1
+ network 10.0.12.0 0.0.0.255 area 0
+!
