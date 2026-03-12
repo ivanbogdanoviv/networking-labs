@@ -1,83 +1,68 @@
-# networking-labs
+# Networking Labs — Ivan Bogdanov Ivanov
 
-Hands-on CCNA-style lab configurations, topologies, and automation scripts built while pursuing my **CompTIA Network+/CCNA** studies and directly supporting the **Home & Lab Network Design** project in my [portfolio](https://ivanbiv.lovable.app).
+CCNA-level networking labs completed at George Brown College (2025–2026).
+All labs run on NDG NETLAB+ with Cisco IOS virtual equipment.
 
----
+![Cisco IOS](https://img.shields.io/badge/Cisco_IOS-1BA0D7?style=flat&logo=cisco&logoColor=white)
+![CCNA](https://img.shields.io/badge/CCNAv7-1BA0D7?style=flat&logo=cisco&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?style=flat&logo=gnubash&logoColor=white)
 
-## Purpose
+## Labs Completed
 
-This repo documents real lab work: configuring VLANs, routing protocols, access control lists, and more — using Cisco Packet Tracer and GNS3. Each lab folder contains topology diagrams, device configs, and notes on what was learned.
+| # | Lab | Topic | Date |
+|---|-----|-------|------|
+| 01 | 1.1.7 Basic Switch Configuration | Switch hardening, passwords, SSH | Oct 2025 |
+| 02 | 1.6.2 Basic Router Settings | Router interfaces, connectivity | Oct 2025 |
+| 03 | 3.4.6 Configure VLANs and Trunking | VLAN segmentation, trunk links | Oct 2025 |
+| 04 | 3.6.2 Implement VLANs and Trunking | Advanced trunking, STP portfast | Oct 2025 |
+| 05 | 4.2.8 Router-on-a-Stick Inter-VLAN | ROAS, 802.1Q sub-interfaces | Oct 2025 |
+| 06 | 4.2.8 Router-on-a-Stick v2 | ROAS reinforcement | Dec 2025 |
+| 07 | 6.4.2 Implement EtherChannel | LACP link aggregation | Oct 2025 |
+| 08 | 7.4.2 Implement DHCPv4 | DHCP server, relay agent | Oct–Nov 2025 |
+| 09 | 15.6.2 IPv4 and IPv6 Static Routes | Static/default routing, dual-stack | Nov 2025 |
+| 10 | 16.3.2 Troubleshoot Static Routes | Methodical troubleshooting | Nov 2025 |
+| 11 | 2.7.2 Single-Area OSPFv2 | OSPF, router-ID, adjacency | Jan 2026 |
+| 12 | 5.5.2 Extended IPv4 ACLs | ACL design, permit/deny, SSH block | Feb 2026 |
+| 13 | 6.8.2 Configure NAT for IPv4 | Dynamic NAT, PAT, static NAT | Feb 2026 |
+| — | Open Lab ASA Pod | Cisco ASA firewall basics | Oct 2025 |
 
-The `scripts/` folder holds Python and Bash tools for automating repetitive tasks like backing up configs over SSH and verifying connectivity.
+## Utility Scripts
 
----
+| Script | Description |
+|--------|-------------|
+| `scripts/subnet_calculator.py` | Given IP/CIDR, outputs network/broadcast/usable hosts |
+| `scripts/ping_sweep.sh` | Discovers live hosts on a /24 subnet |
+| `scripts/vlan_checker.py` | Parses `show vlan brief` output into a clean table |
 
-## Lab Index
+## Topics Covered
+- Switch and router initial configuration
+- VLANs, trunking (802.1Q), native VLANs
+- Router-on-a-Stick inter-VLAN routing
+- EtherChannel (LACP)
+- DHCPv4 (server + relay)
+- IPv4 and IPv6 static/default routes
+- OSPF single-area routing
+- Extended ACLs
+- NAT/PAT (dynamic, static, overload)
+- Cisco ASA firewall basics
 
-| # | Topic | Tools | Status |
-|---|-------|-------|--------|
-| 01 | Basic VLAN Segmentation | Packet Tracer | In progress |
-| 02 | OSPF Single-Area Routing | Packet Tracer / GNS3 | Planned |
-| 03 | ACL Basics (Standard & Extended) | Packet Tracer | Planned |
-
----
-
-## Folder Structure
-
-```
-networking-labs/
-├── labs/
-│   ├── 01-basic-vlan/          # VLAN configs, topology diagram
-│   ├── 02-ospf-single-area/    # OSPF configs across multiple routers
-│   └── 03-acl-basics/          # ACL permit/deny examples
-├── scripts/
-│   ├── backup_configs.py       # SSH into devices and dump running configs
-│   └── verify_connectivity.sh  # Automated ping sweep for reachability tests
-└── topologies/                 # .pkt and .gns3 topology save files
-```
-
----
-
-## How to Use
-
-1. Open `.pkt` files in **Cisco Packet Tracer 8.x** or `.gns3` files in **GNS3 2.x**.
-2. Device configs in each `labs/` subfolder mirror what's applied inside the topology.
-3. To run automation scripts:
-
+## How to Use the Scripts
 ```bash
-pip install netmiko
-python scripts/backup_configs.py
+# Subnet calculator
+python3 scripts/subnet_calculator.py 10.53.0.0/30
+
+# Ping sweep your lab /24
+chmod +x scripts/ping_sweep.sh
+./scripts/ping_sweep.sh 192.168.1
+
+# Parse show vlan brief (paste output into a .txt file first)
+python3 scripts/vlan_checker.py my_vlan_output.txt
 ```
 
----
+## Adding Your Own Configs
+Drop Cisco IOS config exports (.txt) into `configs/` and they will be version-controlled here.
 
-## Key Commands Cheatsheet
-
-```
-# Show VLANs
-show vlan brief
-
-# Verify OSPF neighbors
-show ip ospf neighbor
-
-# Check ACL hits
-show ip access-lists
-
-# Backup running config via SSH (netmiko)
-python scripts/backup_configs.py --host 192.168.1.1 --user admin
-```
-
----
-
-## Tech Stack
-
-- Cisco IOS (Packet Tracer / GNS3)
-- Python 3 + [netmiko](https://github.com/ktbyers/netmiko) for SSH automation
-- Bash for connectivity testing
-- Git for versioning configs
-
----
-
-## Portfolio Connection
-
-This repo supports the **Home & Lab Network Design** project on my [portfolio site](https://ivanbiv.lovable.app), which covers VLAN segmentation, inter-VLAN routing, and a layered home network topology built for study and real-world use.
+## About
+Built by Ivan Bogdanov Ivanov — Computer Systems Technician student at George Brown College, Toronto.
+Target roles: Junior IT Support | Network Technician | Help Desk
