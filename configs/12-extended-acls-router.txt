@@ -1,0 +1,127 @@
+! ============================================================
+! Lab 12 — Extended IPv4 ACLs
+! Device: R1 (Cisco 2911)
+! Goal: Block Telnet from Sales VLAN; restrict IT to HTTPS only
+!       toward Finance server; permit all other traffic
+! Domain: corp.local | Captured: 2026-02-08
+! ============================================================
+
+version 15.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+
+hostname R1
+
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+
+no ip domain-lookup
+
+!
+! ============================================================
+! Interfaces
+! ============================================================
+interface GigabitEthernet0/0
+ description LAN_VLAN10_Sales_192.168.10.0/24
+ ip address 192.168.10.1 255.255.255.0
+ ip access-group BLOCK-TELNET in
+ duplex auto
+ speed auto
+ no shutdown
+
+interface GigabitEthernet0/1
+ description LAN_VLAN20_IT_192.168.20.0/24
+ ip address 192.168.20.1 255.255.255.0
+ ip access-group IT-TO-FINANCE in
+ duplex auto
+ speed auto
+ no shutdown
+
+interface GigabitEthernet0/2
+ description WAN_Uplink_203.0.113.0/30
+ ip address 203.0.113.2 255.255.255.252
+ duplex auto
+ speed auto
+ no shutdown
+
+!
+! ============================================================
+! Named Extended ACL: BLOCK-TELNET
+! Applied inbound on Gi0/0 (Sales VLAN)
+! Purpose: deny Telnet from Sales VLAN to any destination;
+!          deny SSH from Sales to R1 management plane;
+!          permit all other traffic.
+! ============================================================
+ip access-list extended BLOCK-TELNET
+ remark --- Block Telnet from Sales VLAN to anywhere ---
+ deny   tcp 192.168.10.0 0.0.0.255 any eq 23
+ remark --- Block SSH from Sales to this router only ---
+ deny   tcp 192.168.10.0 0.0.0.255 host 192.168.10.1 eq 22
+ remark --- Permit all other IP traffic ---
+ permit ip any any
+
+!
+! ============================================================
+! Named Extended ACL: IT-TO-FINANCE
+! Applied inbound on Gi0/1 (IT VLAN)
+! Purpose: IT staff may only reach Finance server on HTTPS (443);
+!          DNS is permitted; everything else toward Finance blocked.
+! ============================================================
+ip access-list extended IT-TO-FINANCE
+ remark --- Allow HTTPS to Finance server ---
+ permit tcp 192.168.20.0 0.0.0.255 host 10.10.10.50 eq 443
+ remark --- Allow DNS (UDP and TCP) ---
+ permit udp 192.168.20.0 0.0.0.255 any eq 53
+ permit tcp 192.168.20.0 0.0.0.255 any eq 53
+ remark --- Block all other traffic to Finance subnet ---
+ deny   ip 192.168.20.0 0.0.0.255 10.10.10.0 0.0.0.255
+ remark --- Permit all remaining traffic ---
+ permit ip any any
+
+!
+! ============================================================
+! Default route
+! ============================================================
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+
+!
+! ============================================================
+! Line configuration
+! ============================================================
+line con 0
+ password cisco
+ login
+ logging synchronous
+
+line vty 0 4
+ password cisco
+ login
+ transport input ssh
+
+!
+end
+
+! ============================================================
+! Verification — show ip access-lists (after traffic has flowed)
+! ============================================================
+! R1# show ip access-lists
+!
+! Extended IP access list BLOCK-TELNET
+!     10 deny tcp 192.168.10.0 0.0.0.255 any eq telnet (14 matches)
+!     20 deny tcp 192.168.10.0 0.0.0.255 host 192.168.10.1 eq 22 (0 matches)
+!     30 permit ip any any (247 matches)
+!
+! Extended IP access list IT-TO-FINANCE
+!     10 permit tcp 192.168.20.0 0.0.0.255 host 10.10.10.50 eq 443 (38 matches)
+!     20 permit udp 192.168.20.0 0.0.0.255 any eq 53 (12 matches)
+!     30 permit tcp 192.168.20.0 0.0.0.255 any eq 53 (3 matches)
+!     40 deny ip 192.168.20.0 0.0.0.255 10.10.10.0 0.0.0.255 (7 matches)
+!     50 permit ip any any (189 matches)
+!
+! R1# show ip interface gi0/0 | include access list
+!   Inbound  access list is BLOCK-TELNET
+!   Outbound access list is not set
+!
+! R1# show ip interface gi0/1 | include access list
+!   Inbound  access list is IT-TO-FINANCE
+!   Outbound access list is not set

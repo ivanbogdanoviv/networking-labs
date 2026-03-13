@@ -40,13 +40,31 @@ Each lab includes a network topology diagram showing device connections, IP addr
 | OSPF Single Area | ![](screenshots/11-ospfv2-single-area.png) |
 | NAT IPv4 | ![](screenshots/13-nat-ipv4.png) |
 
+## Device Configs
+
+Real Cisco IOS running-config exports from lab sessions. Each file includes inline verification output (show command results) at the bottom.
+
+| File | Lab | Description |
+|---|---|---|
+| `configs/03-vlans-trunking-sw1.txt` | Lab 03 | SW1 with VLANs 10/20/30, trunk to SW2, access ports, management SVI |
+| `configs/05-inter-vlan-routing-router.txt` | Lab 05 | R1 Router-on-a-Stick with subinterfaces, DHCP pools, default route |
+| `configs/11-ospfv2-r1.txt` | Lab 11 | R1 OSPFv2 single-area, router-ID 1.1.1.1, passive interfaces, loopback |
+| `configs/12-extended-acls-router.txt` | Lab 12 | R1 with BLOCK-TELNET and IT-TO-FINANCE named extended ACLs |
+| `configs/13-nat-ipv4-router.txt` | Lab 13 | R1 with dynamic NAT pool, PAT overload, static NAT for web server |
+
+## Documentation
+
+| File | Description |
+|---|---|
+| `docs/ios-command-reference.md` | Quick reference for 30 most-used IOS commands organized by category (Basic, VLAN, Trunk, Routing, OSPF, ACL, NAT, DHCP, Troubleshooting) |
+
 ## Utility Scripts
 
 | Script | Description |
 |--------|-------------|
-| `scripts/subnet_calculator.py` | Given IP/CIDR, outputs network/broadcast/usable hosts |
+| `scripts/subnet_calculator.py` | CIDR or IP+mask input. Shows network, broadcast, first/last host, wildcard mask. `--split N` divides into N equal subnets. Colorized output. |
 | `scripts/ping_sweep.sh` | Discovers live hosts on a /24 subnet |
-| `scripts/vlan_checker.py` | Parses `show vlan brief` output into a clean table |
+| `scripts/vlan_checker.py` | Parses `show vlan brief` + `show interfaces trunk` output. Accepts a single file or a directory. Flags trunk/active mismatches and portless VLANs. `-o` exports to CSV. |
 
 ## Topics Covered
 - Switch and router initial configuration
@@ -62,15 +80,27 @@ Each lab includes a network topology diagram showing device connections, IP addr
 
 ## How to Use the Scripts
 ```bash
-# Subnet calculator
+# Subnet calculator — CIDR input
 python3 scripts/subnet_calculator.py 10.53.0.0/30
+
+# Subnet calculator — IP + mask input
+python3 scripts/subnet_calculator.py 192.168.1.0 255.255.255.0
+
+# Split a network into 4 equal subnets
+python3 scripts/subnet_calculator.py 172.16.0.0/16 --split 4
 
 # Ping sweep your lab /24
 chmod +x scripts/ping_sweep.sh
 ./scripts/ping_sweep.sh 192.168.1
 
-# Parse show vlan brief (paste output into a .txt file first)
+# Check a single show vlan brief output file
 python3 scripts/vlan_checker.py my_vlan_output.txt
+
+# Check all .txt files in a directory
+python3 scripts/vlan_checker.py ./switch-outputs/
+
+# Check and export results to CSV
+python3 scripts/vlan_checker.py ./switch-outputs/ -o vlan_report.csv
 ```
 
 ## Adding Your Own Configs
@@ -79,3 +109,4 @@ Drop Cisco IOS config exports (.txt) into `configs/` and they will be version-co
 ## About
 Built by Ivan Bogdanov Ivanov — Computer Systems Technician student at George Brown College, Toronto.
 Target roles: Junior IT Support | Network Technician | Help Desk
+Portfolio: [www.ivanbiv.com](https://www.ivanbiv.com)

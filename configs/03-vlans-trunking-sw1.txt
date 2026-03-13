@@ -1,0 +1,162 @@
+! ============================================================
+! Lab 03 — Configure VLANs and Trunking
+! Device: SW1 (Cisco Catalyst 2960)
+! Domain: corp.local | Captured: 2025-10-14
+! ============================================================
+
+version 15.0
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+
+hostname SW1
+
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+
+banner motd ^
+*****************************************************
+*  AUTHORIZED ACCESS ONLY — SW1 — George Brown Lab  *
+*****************************************************
+^
+
+no ip domain-lookup
+
+!
+! ============================================================
+! VLANs
+! ============================================================
+vlan 10
+ name Sales
+vlan 20
+ name IT
+vlan 30
+ name Management
+vlan 99
+ name NativeVLAN
+
+!
+! ============================================================
+! Trunk Port to SW2 (Gi0/1)
+! ============================================================
+interface GigabitEthernet0/1
+ description Trunk_to_SW2
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+
+!
+! ============================================================
+! Access Ports — Sales (VLAN 10)
+! ============================================================
+interface FastEthernet0/1
+ description PC-Sales-1
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+
+interface FastEthernet0/2
+ description PC-Sales-2
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+
+!
+! ============================================================
+! Access Ports — IT (VLAN 20)
+! ============================================================
+interface FastEthernet0/3
+ description PC-IT-1
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+
+interface FastEthernet0/4
+ description PC-IT-2
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+
+!
+! ============================================================
+! Access Ports — Management (VLAN 30)
+! ============================================================
+interface FastEthernet0/5
+ description PC-Mgmt-1
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+
+!
+! ============================================================
+! Management SVI
+! ============================================================
+interface Vlan30
+ description Management_SVI
+ ip address 192.168.30.2 255.255.255.0
+ no shutdown
+
+ip default-gateway 192.168.30.1
+
+!
+! ============================================================
+! Unused ports — shut down (security hardening)
+! ============================================================
+interface range FastEthernet0/6 - 24
+ description Unused
+ switchport mode access
+ switchport access vlan 99
+ shutdown
+
+!
+! ============================================================
+! Line configuration
+! ============================================================
+line con 0
+ password cisco
+ login
+ logging synchronous
+
+line vty 0 4
+ password cisco
+ login
+ transport input ssh telnet
+
+line vty 5 15
+ login
+ transport input none
+
+!
+end
+
+! ============================================================
+! Verification output — show interfaces trunk
+! ============================================================
+! SW1# show interfaces trunk
+!
+! Port        Mode         Encapsulation  Status        Native vlan
+! Gi0/1       on           802.1q         trunking      99
+!
+! Port        Vlans allowed on trunk
+! Gi0/1       10,20,30,99
+!
+! Port        Vlans allowed and active in management domain
+! Gi0/1       10,20,30,99
+!
+! Port        Vlans in spanning tree forwarding state and not pruned
+! Gi0/1       10,20,30,99
+!
+! SW1# show vlan brief
+!
+! VLAN Name                             Status    Ports
+! ---- -------------------------------- --------- ---
+! 1    default                          active
+! 10   Sales                            active    Fa0/1, Fa0/2
+! 20   IT                               active    Fa0/3, Fa0/4
+! 30   Management                       active    Fa0/5
+! 99   NativeVLAN                       active

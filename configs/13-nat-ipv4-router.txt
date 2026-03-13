@@ -1,0 +1,147 @@
+! ============================================================
+! Lab 13 — Configure NAT for IPv4
+! Device: R1 (Cisco 2911)
+! Topology: Three internal VLANs → R1 → ISP (dynamic NAT + PAT)
+!           Static NAT entry for internal web server
+! Domain: corp.local | Captured: 2026-02-19
+! ============================================================
+
+version 15.2
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+
+hostname R1
+
+enable secret 5 $1$mERr$hx5rVt7rPNoS4wqbXKX7m0
+
+no ip domain-lookup
+
+!
+! ============================================================
+! Inside interfaces (NAT inside)
+! ============================================================
+interface GigabitEthernet0/0
+ description Inside_LAN_192.168.10.0/24
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ no shutdown
+
+interface GigabitEthernet0/1
+ description Inside_LAN_192.168.20.0/24
+ ip address 192.168.20.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ no shutdown
+
+!
+! ============================================================
+! Outside interface (NAT outside — faces the internet)
+! ============================================================
+interface GigabitEthernet0/2
+ description Outside_WAN_ISP
+ ip address 203.0.113.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ no shutdown
+
+!
+! ============================================================
+! NAT Pool — public IP range assigned by ISP
+! ============================================================
+ip nat pool PUBLIC_POOL 203.0.113.10 203.0.113.20 netmask 255.255.255.0
+
+!
+! ============================================================
+! ACL — defines which inside addresses are eligible for NAT
+! ============================================================
+ip access-list standard NAT_INSIDE_SOURCES
+ remark Permit all RFC1918 internal subnets
+ permit 192.168.10.0 0.0.0.255
+ permit 192.168.20.0 0.0.0.255
+
+!
+! ============================================================
+! Dynamic NAT — translates matching inside hosts to pool
+! ============================================================
+ip nat inside source list NAT_INSIDE_SOURCES pool PUBLIC_POOL overload
+
+!
+! ============================================================
+! Static NAT — internal web server always maps to same public IP
+! Internal: 192.168.10.100  Public: 203.0.113.5
+! ============================================================
+ip nat inside source static 192.168.10.100 203.0.113.5
+
+!
+! ============================================================
+! Default route toward ISP
+! ============================================================
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+
+!
+! ============================================================
+! DHCP pools (R1 is also DHCP server for inside clients)
+! ============================================================
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+
+ip dhcp pool LAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+
+ip dhcp pool LAN20
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+
+!
+! ============================================================
+! Line configuration
+! ============================================================
+line con 0
+ password cisco
+ login
+ logging synchronous
+
+line vty 0 4
+ password cisco
+ login
+ transport input ssh
+
+!
+end
+
+! ============================================================
+! Verification — show ip nat translations
+! ============================================================
+! R1# show ip nat translations
+!
+! Pro  Inside global       Inside local        Outside local       Outside global
+! tcp  203.0.113.5:80      192.168.10.100:80   ---                 ---
+! tcp  203.0.113.10:1025   192.168.10.11:1025  8.8.8.8:53          8.8.8.8:53
+! tcp  203.0.113.10:1026   192.168.10.12:3456  142.250.80.46:443   142.250.80.46:443
+! tcp  203.0.113.10:1027   192.168.20.11:4512  142.250.80.46:80    142.250.80.46:80
+! udp  203.0.113.10:1028   192.168.10.13:1028  8.8.4.4:53          8.8.4.4:53
+!
+! R1# show ip nat statistics
+!
+! Total active translations: 5 (1 static, 4 dynamic; 4 extended)
+! Outside interfaces: GigabitEthernet0/2
+! Inside interfaces:  GigabitEthernet0/0, GigabitEthernet0/1
+! Hits: 1842  Misses: 5
+! Expired translations: 0
+! Dynamic mappings:
+! -- Inside Source
+! access-list NAT_INSIDE_SOURCES pool PUBLIC_POOL refcount 4
+!  pool PUBLIC_POOL: netmask 255.255.255.0
+!         start 203.0.113.10 end 203.0.113.20
+!         type generic, total addresses 11, allocated 1 (9%), misses 0
