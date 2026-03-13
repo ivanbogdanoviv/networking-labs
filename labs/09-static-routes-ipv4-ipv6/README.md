@@ -9,6 +9,8 @@
 Configure IPv4 and IPv6 static routes, default routes, and floating static routes on a multi-router topology. Verify end-to-end reachability across all subnets using both IPv4 and IPv6 addressing.
 
 ## Topology
+
+![Network Topology](../../screenshots/09-static-routes-ipv4-ipv6.png)
 ```
 PC-A           PC-B            PC-C
   |              |                |

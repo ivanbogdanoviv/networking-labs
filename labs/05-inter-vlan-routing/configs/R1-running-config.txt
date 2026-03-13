@@ -1,0 +1,27 @@
+! R1 Running Configuration - Inter-VLAN Routing (Router-on-a-Stick)
+! George Brown College - CCNA Lab 05
+!
+hostname R1
+!
+enable secret 5 $1$mERr$IimqM3UsHvZsGqLDqkb8H0
+!
+interface GigabitEthernet0/0
+ description Trunk to S1
+ no ip address
+ no shutdown
+!
+interface GigabitEthernet0/0.10
+ description Gateway for VLAN 10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+!
+interface GigabitEthernet0/0.20
+ description Gateway for VLAN 20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+!
+interface GigabitEthernet0/0.1000
+ description Native VLAN
+ encapsulation dot1Q 1000 native
+!
+end

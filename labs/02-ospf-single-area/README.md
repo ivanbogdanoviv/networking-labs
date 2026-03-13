@@ -1,22 +1,34 @@
-# Lab 02 — OSPF Single-Area Routing
+# Lab 02 – OSPF Single Area
+
+![Network Topology](../../screenshots/11-ospfv2-single-area.png)
 
 ## Objective
-Configure OSPF area 0 across multiple routers and verify neighbor adjacencies and route propagation.
+Configure OSPFv2 in a single area (Area 0) across three routers. Verify OSPF neighbor adjacency and routing table entries.
 
 ## Topology
-_(topology.png will be added when lab is built)_
+- R1 (RID 1.1.1.1) ↔ R2 (RID 2.2.2.2) ↔ R3 (RID 3.3.3.3)
+- R1 LAN: 192.168.1.0/24
+- R3 LAN: 192.168.3.0/24
+- R1–R2 WAN: 10.53.0.0/30
+- R2–R3 WAN: 10.54.0.0/30
 
-## Devices
-| Device | Role |
-|--------|------|
-| R1 | OSPF Router |
-| R2 | OSPF Router |
-| R3 | OSPF Router |
+## Key Commands
+```
+router ospf 56
+ router-id 1.1.1.1
+ network 192.168.1.0 0.0.0.255 area 0
+ network 10.53.0.0 0.0.0.3 area 0
+ passive-interface GigabitEthernet0/0/0
+```
 
-## Key Configs
-- `configs/config-r1.txt`
-- `configs/config-r2.txt`
-- `configs/config-r3.txt`
+## Verification
+- `show ip ospf neighbor` — confirm FULL adjacency
+- `show ip route ospf` — confirm O routes present
+- `show ip ospf interface brief` — check costs
+- Ping PC-A → PC-C across OSPF domain
 
-## Notes
-_Lab planned._
+## Learning Outcomes
+- Configure OSPFv2 process and router-ID
+- Advertise networks into OSPF area 0
+- Verify DR/BDR election
+- Use passive-interface for LAN segments

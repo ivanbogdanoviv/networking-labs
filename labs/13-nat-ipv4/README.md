@@ -9,6 +9,8 @@
 Configure three forms of IPv4 NAT on a Cisco router: static NAT (one-to-one), dynamic NAT (pool), and PAT/overload (many-to-one). Verify that inside hosts can communicate with outside hosts using translated addresses.
 
 ## Topology
+
+![Network Topology](../../screenshots/13-nat-ipv4.png)
 ```
 PC-A (192.168.1.10)
      |

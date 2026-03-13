@@ -9,6 +9,8 @@
 Configure a Cisco router as a DHCPv4 server with two address pools. Configure a second router as a DHCP relay agent to forward DHCP requests from clients on a remote subnet. Verify that all clients receive IP configuration automatically.
 
 ## Topology
+
+![Network Topology](../../screenshots/08-dhcpv4.png)
 ```
 PC-A               PC-B              PC-C
 (DHCP client)      (DHCP client)     (DHCP client)

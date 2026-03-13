@@ -1,0 +1,137 @@
+! S1 Running Configuration - Basic Switch Config Lab
+! George Brown College - CCNA Lab 01
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$mERr$IimqM3UsHvZsGqLDqkb8H0
+!
+no aaa new-model
+!
+ip domain-name ccna.local
+!
+username admin privilege 15 secret 5 $1$mERr$IimqM3UsHvZsGqLDqkb8H0
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1
+ shutdown
+!
+interface FastEthernet0/2
+ shutdown
+!
+interface FastEthernet0/3
+ shutdown
+!
+interface FastEthernet0/4
+ shutdown
+!
+interface FastEthernet0/5
+ shutdown
+!
+interface FastEthernet0/6
+ description PC-A
+ switchport mode access
+ switchport access vlan 1
+!
+interface FastEthernet0/7
+ shutdown
+!
+interface FastEthernet0/8
+ shutdown
+!
+interface FastEthernet0/9
+ shutdown
+!
+interface FastEthernet0/10
+ shutdown
+!
+interface FastEthernet0/11
+ description PC-B
+ switchport mode access
+ switchport access vlan 1
+!
+interface FastEthernet0/12
+ shutdown
+!
+interface FastEthernet0/13
+ shutdown
+!
+interface FastEthernet0/14
+ shutdown
+!
+interface FastEthernet0/15
+ shutdown
+!
+interface FastEthernet0/16
+ shutdown
+!
+interface FastEthernet0/17
+ shutdown
+!
+interface FastEthernet0/18
+ shutdown
+!
+interface FastEthernet0/19
+ shutdown
+!
+interface FastEthernet0/20
+ shutdown
+!
+interface FastEthernet0/21
+ shutdown
+!
+interface FastEthernet0/22
+ shutdown
+!
+interface FastEthernet0/23
+ shutdown
+!
+interface FastEthernet0/24
+ shutdown
+!
+interface GigabitEthernet0/1
+ shutdown
+!
+interface GigabitEthernet0/2
+ shutdown
+!
+interface Vlan1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.1.1
+!
+ip http server
+ip http authentication local
+!
+banner motd ^
+*************************************
+* Authorized Access Only            *
+* George Brown College - CCNA Lab   *
+*************************************
+^
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login
+!
+line vty 0 4
+ password 7 14141B180F0B
+ login local
+ transport input ssh telnet
+!
+line vty 5 15
+ login
+!
+end

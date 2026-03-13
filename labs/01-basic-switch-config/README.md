@@ -9,6 +9,8 @@
 Configure basic security and management settings on a Cisco switch. Apply hostname, passwords, banners, and SSH preparation to harden an unconfigured switch. Save the configuration to NVRAM.
 
 ## Topology
+
+![Network Topology](../../screenshots/01-basic-switch-config.png)
 ```
    PC-A           PC-B
     |               |

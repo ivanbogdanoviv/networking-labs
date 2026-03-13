@@ -27,6 +27,19 @@ All labs run on NDG NETLAB+ with Cisco IOS virtual equipment.
 | 13 | 6.8.2 Configure NAT for IPv4 | Dynamic NAT, PAT, static NAT | Feb 2026 |
 | — | Open Lab ASA Pod | Cisco ASA firewall basics | Oct 2025 |
 
+## Network Topology Diagrams
+
+Each lab includes a network topology diagram showing device connections, IP addressing, and configuration highlights.
+
+| Lab | Topology |
+|-----|---------|
+| Basic Switch Config | ![](screenshots/01-basic-switch-config.png) |
+| Basic Router Settings | ![](screenshots/02-basic-router-settings.png) |
+| VLANs & Trunking | ![](screenshots/03-vlans-trunking.png) |
+| EtherChannel | ![](screenshots/07-etherchannel.png) |
+| OSPF Single Area | ![](screenshots/11-ospfv2-single-area.png) |
+| NAT IPv4 | ![](screenshots/13-nat-ipv4.png) |
+
 ## Utility Scripts
 
 | Script | Description |

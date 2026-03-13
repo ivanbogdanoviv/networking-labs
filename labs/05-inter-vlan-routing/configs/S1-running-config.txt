@@ -1,0 +1,32 @@
+! S1 Running Configuration - Inter-VLAN Routing (Router-on-a-Stick)
+! George Brown College - CCNA Lab 05
+!
+hostname S1
+!
+vlan 10
+ name Student
+!
+vlan 20
+ name Faculty
+!
+vlan 1000
+ name Native
+!
+interface GigabitEthernet0/1
+ description Trunk to R1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 1000
+ switchport trunk allowed vlan 10,20,1000
+ switchport mode trunk
+!
+interface FastEthernet0/6
+ description PC-A VLAN 10
+ switchport access vlan 10
+ switchport mode access
+!
+interface FastEthernet0/11
+ description PC-B VLAN 20
+ switchport access vlan 20
+ switchport mode access
+!
+end

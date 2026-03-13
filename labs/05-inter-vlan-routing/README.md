@@ -9,6 +9,8 @@
 Configure Router-on-a-Stick (ROAS) to enable inter-VLAN routing using a single physical router interface divided into 802.1Q sub-interfaces. Verify that hosts in different VLANs can communicate through R1.
 
 ## Topology
+
+![Network Topology](../../screenshots/05-inter-vlan-routing.png)
 ```
 PC-A (VLAN 20)   PC-B (VLAN 30)
       |                 |

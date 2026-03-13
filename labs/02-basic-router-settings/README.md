@@ -9,6 +9,8 @@
 Configure basic settings on a Cisco router including hostname, interface IP addressing, SSH, and default routing. Verify end-to-end connectivity between two PC subnets through the router.
 
 ## Topology
+
+![Network Topology](../../screenshots/02-basic-router-settings.png)
 ```
 PC-A (192.168.0.10)
      |

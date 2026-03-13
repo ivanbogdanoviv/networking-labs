@@ -9,6 +9,8 @@
 Design and implement extended IPv4 ACLs to enforce network security policies. Block SSH from Sales VLAN to Management VLAN while permitting all other traffic. Block ICMP echo between Operations and Sales VLANs. Apply ACLs close to the source.
 
 ## Topology
+
+![Network Topology](../../screenshots/12-extended-acls-ipv4.png)
 ```
 PC-A (VLAN 20/Sales)      PC-B (VLAN 30/Operations)
         |                         |

@@ -9,6 +9,8 @@
 Revisit and reinforce Router-on-a-Stick inter-VLAN routing. Rebuild the lab independently from memory, identifying and resolving sub-interface configuration issues without step-by-step guidance.
 
 ## Topology
+
+![Network Topology](../../screenshots/06-inter-vlan-routing-v2.png)
 ```
 PC-A (VLAN 20)   PC-B (VLAN 30)
       |                 |

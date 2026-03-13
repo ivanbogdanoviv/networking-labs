@@ -9,6 +9,8 @@
 Create and name VLANs on Cisco switches, assign access ports to VLANs, and configure trunk links between switches. Understand the purpose of native VLANs and verify VLAN propagation.
 
 ## Topology
+
+![Network Topology](../../screenshots/03-vlans-trunking.png)
 ```
        PC-A (VLAN 20)    PC-B (VLAN 30)
            |                   |

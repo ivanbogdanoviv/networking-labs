@@ -9,6 +9,8 @@
 Build on basic VLAN and trunking skills by configuring allowed VLANs on trunk links, enabling STP PortFast on access ports, and troubleshooting VLAN mismatches. Verify that only permitted VLANs cross trunk links.
 
 ## Topology
+
+![Network Topology](../../screenshots/04-vlans-trunking-advanced.png)
 ```
        PC-A (VLAN 20)    PC-B (VLAN 30)
            |                   |

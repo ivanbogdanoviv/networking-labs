@@ -9,6 +9,8 @@
 Open-ended exploration of the Cisco ASA (Adaptive Security Appliance) firewall platform. Configure basic ASA settings, assign security zones to interfaces, and understand the fundamental difference between stateful firewall policy and router ACLs.
 
 ## Topology
+
+![Network Topology](../../screenshots/open-lab-asa.png)
 ```
      [Internet/Outside]
             |

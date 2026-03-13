@@ -9,6 +9,8 @@
 Configure OSPFv2 in a single area (Area 0) between two routers. Set router IDs manually, configure network statements, optimize OSPF with bandwidth reference, configure passive interfaces, and redistribute a default route to the OSPF domain.
 
 ## Topology
+
+![Network Topology](../../screenshots/11-ospfv2-single-area.png)
 ```
          Loopback 1
     172.16.1.1/24

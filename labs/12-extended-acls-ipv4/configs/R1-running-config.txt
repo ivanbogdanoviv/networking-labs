@@ -1,0 +1,26 @@
+! R1 Running Configuration - Extended ACLs IPv4
+! George Brown College - CCNA Lab 12
+!
+hostname R1
+!
+interface GigabitEthernet0/0/0
+ description LAN - PC-A/B network
+ ip address 192.168.10.1 255.255.255.0
+ ip access-group ACL-PERMIT-WEB in
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description LAN - Server network
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+!
+! Extended ACL - permit HTTP/HTTPS, deny FTP/TFTP
+ip access-list extended ACL-PERMIT-WEB
+ 10 permit tcp 192.168.10.0 0.0.0.255 host 192.168.20.254 eq 80
+ 20 permit tcp 192.168.10.0 0.0.0.255 host 192.168.20.254 eq 443
+ 30 deny tcp 192.168.10.0 0.0.0.255 host 192.168.20.254 eq 21
+ 40 deny tcp 192.168.10.0 0.0.0.255 host 192.168.20.254 eq 20
+ 50 deny udp 192.168.10.0 0.0.0.255 host 192.168.20.254 eq 69
+ 60 permit ip any any
+!
+end

@@ -1,0 +1,56 @@
+! S1 Running Configuration - EtherChannel Lab
+! George Brown College - CCNA Lab 07
+!
+hostname S1
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1,10,20,99 priority 4096
+!
+interface Port-channel1
+ description EtherChannel to S2 (LACP)
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+!
+interface Port-channel2
+ description EtherChannel to S3 (PAgP)
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+!
+interface FastEthernet0/21
+ description EtherChannel to S2 - LACP
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface FastEthernet0/22
+ description EtherChannel to S2 - LACP
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface FastEthernet0/23
+ description EtherChannel to S3 - PAgP
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ channel-group 2 mode desirable
+!
+interface FastEthernet0/24
+ description EtherChannel to S3 - PAgP
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ switchport mode trunk
+ channel-group 2 mode desirable
+!
+end

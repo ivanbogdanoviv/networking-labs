@@ -1,0 +1,61 @@
+! R1 Running Configuration - Basic Router Settings Lab
+! George Brown College - CCNA Lab 02
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R1
+!
+enable secret 5 $1$mERr$IimqM3UsHvZsGqLDqkb8H0
+!
+aaa new-model
+!
+ip domain-name ccna.local
+!
+crypto key generate rsa modulus 1024
+!
+username admin privilege 15 secret 5 $1$mERr$IimqM3UsHvZsGqLDqkb8H0
+!
+interface GigabitEthernet0/0
+ description LAN Network A - S1
+ ip address 192.168.0.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description LAN Network B - S2
+ ip address 10.0.0.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/2
+ shutdown
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip ssh version 2
+ip ssh authentication-retries 3
+ip ssh time-out 60
+!
+banner motd ^
+*************************************
+* Authorized Access Only            *
+* George Brown College - CCNA Lab   *
+*************************************
+^
+!
+line con 0
+ password 7 14141B180F0B
+ logging synchronous
+ login local
+!
+line aux 0
+!
+line vty 0 4
+ login local
+ transport input ssh
+!
+end

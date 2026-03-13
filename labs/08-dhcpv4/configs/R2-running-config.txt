@@ -1,0 +1,32 @@
+! R2 Running Configuration - DHCPv4 Lab (DHCP Relay)
+! George Brown College - CCNA Lab 08
+!
+hostname R2
+!
+ip dhcp excluded-address 192.168.2.1 192.168.2.9
+ip dhcp excluded-address 192.168.2.254
+!
+ip dhcp pool R2_Client_LAN
+ network 192.168.2.0 255.255.255.0
+ default-router 192.168.2.1
+ dns-server 192.168.2.1
+ domain-name ccna-lab.com
+ lease 2 12 30
+!
+interface GigabitEthernet0/0/0
+ description WAN link to R1
+ ip address 10.0.0.2 255.255.255.252
+ ip helper-address 10.0.0.1
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description LAN - Client Subnet B
+ ip address 192.168.2.1 255.255.255.0
+ no shutdown
+!
+interface GigabitEthernet0/0/2
+ description LAN - Client Subnet C
+ ip address 192.168.3.1 255.255.255.0
+ no shutdown
+!
+end

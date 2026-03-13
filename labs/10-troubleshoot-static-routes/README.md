@@ -9,6 +9,8 @@
 Start with a broken multi-router topology containing intentional misconfigurations and systematically troubleshoot IPv4 and IPv6 static routing issues using the OSI model approach. Document each fault found and the fix applied.
 
 ## Topology
+
+![Network Topology](../../screenshots/10-troubleshoot-static-routes.png)
 ```
 PC-A           PC-B            PC-C
   |              |                |

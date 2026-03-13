@@ -1,21 +1,40 @@
-# Lab 01 — Basic VLAN Segmentation
+# Lab 01 – Basic VLAN Configuration
+
+![Network Topology](../../screenshots/03-vlans-trunking.png)
 
 ## Objective
-Configure VLANs on a layer-2 switch, assign access ports, and verify isolation between VLANs.
+Configure and verify VLANs on a single switch. Assign ports to VLANs and verify VLAN database.
 
 ## Topology
-_(topology.png will be added when lab is built in Packet Tracer)_
+- S1 (2960 switch)
+- PC-A → F0/6 (VLAN 10)
+- PC-B → F0/11 (VLAN 20)
 
-## Devices
-| Device | Role |
-|--------|------|
-| SW1 | Core switch |
-| SW2 | Access switch |
-| PC1-PC4 | End hosts in VLAN 10 / VLAN 20 |
+## Address Table
+| Device | Interface | VLAN | IP Address |
+|--------|-----------|------|------------|
+| S1 | VLAN 1 | 1 | 192.168.1.1/24 |
+| PC-A | NIC | 10 | 192.168.10.3/24 |
+| PC-B | NIC | 20 | 192.168.20.3/24 |
 
-## Key Configs
-- `config-sw1.txt` — SW1 running config
-- `config-sw2.txt` — SW2 running config
+## Key Commands
+```
+vlan 10
+ name Student
+vlan 20
+ name Faculty
+interface f0/6
+ switchport mode access
+ switchport access vlan 10
+show vlan brief
+```
 
-## Notes
-_Lab in progress._
+## Verification
+- `show vlan brief` — confirm VLANs exist and ports assigned
+- `show interfaces trunk` — confirm no unintended trunking
+- PC-A cannot ping PC-B (different VLANs, no routing)
+
+## Learning Outcomes
+- Create and name VLANs
+- Assign switch ports to VLANs
+- Verify VLAN configuration using show commands

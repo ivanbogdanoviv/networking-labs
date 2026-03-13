@@ -9,6 +9,8 @@
 Bundle multiple parallel physical links between two switches into a single logical EtherChannel using LACP. Configure the port-channel as a trunk and verify that bandwidth aggregation and link redundancy are functioning.
 
 ## Topology
+
+![Network Topology](../../screenshots/07-etherchannel.png)
 ```
      [S1]
    F0/1 | F0/2 | F0/3

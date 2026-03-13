@@ -1,0 +1,22 @@
+! R2 Running Configuration - OSPFv2 Single Area
+! George Brown College - CCNA Lab 11
+!
+hostname R2
+!
+interface GigabitEthernet0/0/0
+ description WAN link to R1
+ ip address 10.53.0.2 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet0/0/1
+ description WAN link to R3
+ ip address 10.54.0.1 255.255.255.252
+ no shutdown
+!
+router ospf 56
+ router-id 2.2.2.2
+ auto-cost reference-bandwidth 1000
+ network 10.53.0.0 0.0.0.3 area 0
+ network 10.54.0.0 0.0.0.3 area 0
+!
+end
